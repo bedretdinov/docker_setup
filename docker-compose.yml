@@ -1,0 +1,29 @@
+version: '2.4'
+services:
+  mysql:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'default'
+      MYSQL_USER: 'dev'
+      MYSQL_PASSWORD: 'dev777'
+      MYSQL_ROOT_PASSWORD: 'dev777'
+    ports:
+      - '3313:3306'
+    expose:
+      - '3306'
+    volumes:
+      - ./database:/var/lib/mysql
+    networks:
+      - backend
+  clickhouse:
+    image: yandex/clickhouse-server
+    volumes:
+      - ./clickhouse_data/1:/var/lib/clickhouse
+      # - ./config.xml:/etc/clickhouse-server/config.d/local.xml
+      # - ./macros1.xml:/etc/clickhouse-server/config.d/macros.xml
+    ports:
+      - 8133:8123
+networks:
+  backend:
+    driver: bridge
